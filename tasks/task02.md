@@ -2,6 +2,8 @@
 
 状态：等待 Task 01。建议分支：`task/02-mesh`。
 
+学习入口：[Task 02 学习资料与阅读顺序](../README.md#task02-learning)。先学习 shader 与图形管线，再处理网格数据和深度。
+
 目标：从三角形走到可旋转、遮挡正确的网格，第一次完成“用户先定接口、agent 再实现”的循环。
 
 ## 分工
@@ -40,4 +42,4 @@
 - [ ] 用户文档及 `docs/oral/task02.md` 齐备，口试 5/5 通过。
 - [ ] 按分工完成注释与提交，更新总进度；按用户指令标记 `task-02`。
 
-阅读：[vkguide](https://vkguide.dev/) Chapter 2、3；[Vulkan Spec：Pipelines](https://docs.vulkan.org/spec/latest/chapters/pipelines.html)；[任务入口](README.md)。
+[返回任务入口](README.md)。

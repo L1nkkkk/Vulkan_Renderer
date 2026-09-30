@@ -2,6 +2,8 @@
 
 状态：等待 Task 05。建议分支：`task/06-analysis`。
 
+学习入口：[Task 06 学习资料与阅读顺序](../README.md#task06-learning)。先分析自己的帧，再带着五个对照维度读 NVRHI 文档和接口。
+
 目标：用真实捕获和成熟 RHI 源码审视已有实现。本 Task 不增加渲染功能。
 
 ## 分工
@@ -39,4 +41,4 @@ agent 不替用户抓结论、填对照表或起草分析。讨论源码时核�
 - [ ] `docs/oral/task06.md` 记录口试 4/4 通过。
 - [ ] 更新总进度；按用户指令标记 `task-06`。
 
-阅读：[NVRHI interface](https://github.com/NVIDIA-RTX/NVRHI/blob/main/include/nvrhi/nvrhi.h)；[NVRHI Programming Guide](https://github.com/NVIDIA-RTX/NVRHI/blob/main/doc/ProgrammingGuide.md)；[Writing an efficient Vulkan renderer](https://zeux.io/2020/02/27/writing-an-efficient-vulkan-renderer/)；[任务入口](README.md)。
+[返回任务入口](README.md)。

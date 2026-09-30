@@ -2,6 +2,8 @@
 
 状态：等待 Task 03。建议分支：`task/04-materials`。
 
+学习入口：[Task 04 学习资料与阅读顺序](../README.md#task04-learning)。围绕材质职责、资源销毁、ImGui 接入与绘制排序阅读。
+
 目标：整理材质、绘制提交与资源销毁；这次由用户担任审查者，找出并修复 agent 实现中的问题。
 
 ## 分工
@@ -41,4 +43,4 @@
 - [ ] 用户的 review 与修改独立完成，提交归属清楚。
 - [ ] 更新总进度；按用户指令标记 `task-04`。必修主线结束，选择进阶时再进入 05。
 
-阅读：[vkguide](https://vkguide.dev/) Chapter 5；[Dear ImGui Vulkan backend](https://github.com/ocornut/imgui/blob/master/backends/imgui_impl_vulkan.cpp)；[任务入口](README.md)。
+[返回任务入口](README.md)。

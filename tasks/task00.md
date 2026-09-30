@@ -2,6 +2,8 @@
 
 状态：待开始。前置：无。建议分支：`task/00-env`。
 
+学习入口：[Task 00 学习资料与阅读顺序](../README.md#task00-learning)。先从 Building Project 开始，边读边完成下面的检查项。
+
 目标：能够复现 starter 的构建与启动，并说清构建配置的用途。本 Task 无口试。
 
 ## 分工
@@ -38,4 +40,4 @@
 - [ ] 用户确认生成代码已理解并完成注释，按约定分别提交。
 - [ ] 更新 README 为 00 完成、01 待开始；不执行 `/exam 00`，不预写考试记录。
 
-阅读：[vkguide：Building Project](https://vkguide.dev/docs/new_chapter_0/building_project/)；[返回任务入口](README.md)。
+[返回任务入口](README.md)。

@@ -2,6 +2,8 @@
 
 状态：等待 Task 06。建议分支：`task/07-rhi`。
 
+学习入口：[Task 07 学习资料与阅读顺序](../README.md#task07-learning)。从自己的前序文档出发，对照三种接口，再查设计涉及的专题与规范。
+
 目标：用户设计一版 RHI，借助最小 Vulkan 实现检验接口，再根据实现暴露的问题修订设计。
 
 ## 分工
@@ -40,4 +42,4 @@
 - [ ] 回顾 06～07 的 debug-log，更新总进度；按用户指令标记 `task-07`。
 - [ ] 后续引擎或 render graph 工作另定范围，不混入本 Task 的验收。
 
-阅读：[NVRHI](https://github.com/NVIDIA-RTX/NVRHI)；[Godot RenderingDevice](https://github.com/godotengine/godot/blob/master/servers/rendering/rendering_device.h)；[bgfx](https://github.com/bkaradzic/bgfx)；[任务入口](README.md)。
+[返回任务入口](README.md)。

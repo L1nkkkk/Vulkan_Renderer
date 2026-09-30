@@ -2,6 +2,8 @@
 
 状态：等待 Task 02。建议分支：`task/03-resources`。
 
+学习入口：[Task 03 学习资料与阅读顺序](../README.md#task03-learning)。先学数据绑定和单张纹理，再结合 barrier 学习场景加载。
+
 目标：加载带贴图、多网格、多材质的 glTF 场景，并逐条解释资源状态转换。
 
 ## 分工
@@ -41,4 +43,4 @@
 - [ ] 注入练习已正确结束，正常路径已再次验证。
 - [ ] 回顾 02～03 的 debug-log，更新总进度；按用户指令标记 `task-03`。
 
-阅读：[Vulkan Guide：Synchronization Examples](https://docs.vulkan.org/guide/latest/synchronization_examples.html)；[Vulkan Spec：Descriptor Sets](https://docs.vulkan.org/spec/latest/chapters/descriptorsets.html)；[任务入口](README.md)。
+[返回任务入口](README.md)。

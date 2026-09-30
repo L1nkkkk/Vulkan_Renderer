@@ -2,6 +2,8 @@
 
 状态：等待 Task 04。建议分支：`task/05-passes`。
 
+学习入口：[Task 05 学习资料与阅读顺序](../README.md#task05-learning)。先理解阴影与两个 pass 的关系，再学习查询计时和工具对照。
+
 目标：增加 shadow pass，在主 pass 采样阴影，并能用工具解释各 pass 的 GPU 时间。
 
 ## 分工
@@ -40,4 +42,4 @@
 - [ ] 用户文档及 `docs/oral/task05.md` 齐备，口试 5/5 通过。
 - [ ] 回顾 04～05 的 debug-log，更新总进度；按用户指令标记 `task-05`。
 
-阅读：[Vulkan Spec：Queries](https://docs.vulkan.org/spec/latest/chapters/queries.html)；[Sascha Willems examples](https://github.com/SaschaWillems/Vulkan) 的 shadowmapping / timestampqueries；[任务入口](README.md)。
+[返回任务入口](README.md)。

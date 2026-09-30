@@ -18,6 +18,7 @@
 - [技术栈](#技术栈)
 - [任务总览](#任务总览)
 - [规划资料与执行方式](#规划资料与执行方式)
+- [学习资料怎么用](#学习资料怎么用)
 - [Task 00 环境与协作约定](#task-00-环境与协作约定)
 - [Task 01 帧循环与同步](#task-01-帧循环与同步)
 - [Task 02 管线与网格](#task-02-管线与网格)
@@ -92,7 +93,7 @@ Task 07 会让你设计自己的一版，并对照上面三种风格评审。
 | 类别 | 选择 | 说明 |
 |---|---|---|
 | 语言 / 构建 | C++20、CMake、vcpkg | |
-| 教程主线 | vkguide.dev 2.0 | Task 01～05 对应其 Chapter 0～5 |
+| 教程主线 | vkguide.dev 2.0 | 按各 Task 的文章级学习路径阅读；Task 编号与教程 Chapter 不一一对应 |
 | 基建库 | volk、vk-bootstrap、VMA、SDL3 或 GLFW、glm、fastgltf、Dear ImGui | |
 | Shader | GLSL + glslc，编译加 `-g` | |
 | 调试 | Validation Layer 全程开启、RenderDoc、Nsight Graphics | |
@@ -116,7 +117,7 @@ Task 07 会让你设计自己的一版，并对照上面三种风格评审。
 
 Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的 agent 参与度刻意压低，Task 04 反过来让 agent 大量生成以练 review，Task 05～07 转为"你出设计、agent 出实现"。
 
-每个 Task 的段落结构固定为：目标、知识点、Agent 分工、要求、交付物、口试题、验收、参考。
+每个 Task 先给目标与学习路径，再列知识点、Agent 分工、要求、交付物、口试题和验收。学习路径中的资料都可以直接点击。
 
 ## 规划资料与执行方式
 
@@ -133,6 +134,20 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 
 代码分工不因规划完成而扩大。agent 生成代码前仍需遵守角色与接口先行要求，提交前由用户逐行注释；`[self]` 提交始终由用户执行。规划阶段只建立 `docs/debug-log.md` 空文件和目录占位，不预写任何学习文档或口试结果。
 
+## 学习资料怎么用
+
+第一次开始时，先完成 [Task 00 学习路径](#task00-learning)。进入每个 Task 后，从其学习表第 1 行开始，读一段、实践一段，再使用对应的执行检查表。无需先读完整本教程或 Vulkan Spec。
+
+- **主线必读**：按顺序建立本 Task 所需概念，表中写明阅读范围和对应工作。
+- **补充 / 工具**：在相关概念卡住或准备抓帧时阅读，不要求一次性读完所有链接。
+- **规范查阅**：用于核对具体 API 的约束、Validation 信息和教程中的疑问，按主题查找即可。
+
+这里有两个名字相近的网站：[vkguide.dev](https://vkguide.dev/) 是项目式教程；[Khronos Vulkan Guide](https://docs.vulkan.org/guide/latest/) 是官方专题说明。前者帮助串起流程，后者帮助补全概念和核对细节。
+
+本仓库重新安排了学习顺序。例如图形管线主要取自 vkguide Chapter 3，纹理来自 Chapter 4，完整 glTF 加载来自 Chapter 5。教程某篇文章涉及其他 Task 时，按表中指定范围阅读；实现仍遵守当前 Task 的分工与先后顺序。教程里的示例可用于理解，受保护的接口、同步逻辑和设计文档仍需自己完成。
+
+资料按 2026-10-01 的页面内容核对。教程和库的版本可能不同，Task 00 需记录实际使用的版本；Vulkan 1.3 是本仓库的目标，不因某份资料使用旧式 render pass 或额外扩展而自动更换路线。
+
 ---
 
 ## Task 00 环境与协作约定
@@ -140,6 +155,20 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 ### 目标
 
 搭好工具链，建立与 agent 的协作规则。本任务不涉及 Vulkan 概念。
+
+<a id="task00-learning"></a>
+
+### 学习资料与顺序
+
+| 顺序 | 直接入口 | 阅读重点与对应工作 |
+|---|---|---|
+| 1 · 主线必读 | [vkguide：Building Project](https://vkguide.dev/docs/new_chapter_0/building_project/) | 从这里开始。了解 SDK、编译器、CMake 与 starting point 的关系，完成首次构建 |
+| 2 · 主线必读 | [Project layout and libraries](https://vkguide.dev/docs/introduction/project_libs/) → [Code Walkthrough](https://vkguide.dev/docs/new_chapter_0/code_walkthrough/) | 认识项目目录、依赖用途，以及 starter 的初始化、运行、退出入口；为复述构建过程做准备 |
+| 3 · 按需补充 | [CMake 官方教程](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)；[vcpkg 与 CMake 入门](https://learn.microsoft.com/en-us/vcpkg/get_started/get-started) | 不熟构建工具时阅读基础项目、target 与依赖接入部分；不要求先学完整个 CMake |
+| 4 · 安装入口 | [Vulkan SDK](https://vulkan.lunarg.com/sdk/home)；[RenderDoc](https://renderdoc.org/)；[Nsight Graphics](https://developer.nvidia.com/nsight-graphics) | 与本任务工具安装清单对应，版本信息由你实际检查后记录 |
+| 5 · 工具准备 | [RenderDoc Quick Start](https://renderdoc.org/docs/getting_started/quick_start.html)（[官方源码镜像](https://github.com/baldurk/renderdoc/blob/v1.x/docs/getting_started/quick_start.rst)） | 先认识如何启动应用和捕获一帧；实际帧分析在后续 Task 中练习 |
+
+注意：vkguide 的起始工程带有自己的第三方库安排。本仓库计划使用 vcpkg，需先核对依赖来源与窗口库版本；原教程的构建命令不保证能原样套用到适配后的工程。
 
 ### Agent 分工
 
@@ -179,6 +208,28 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 ### 目标
 
 搭出完整帧循环骨架，画出纯色清屏。理解 Vulkan 初始化链与同步模型。这是概念密度最高的 Task 之一，agent 参与度最低。
+
+<a id="task01-learning"></a>
+
+### 学习资料与顺序
+
+第一轮先读第 1～4 行的概念页，认识对象和执行关系；随后边实践边对照代码讲解页，第 5～7 行在处理对应功能前阅读。每次只需要能解释当前这一步，再继续往下走。
+
+| 顺序 | 直接入口 | 阅读重点与对应工作 |
+|---|---|---|
+| 1 · 主线必读 | [Vulkan API 概览](https://vkguide.dev/docs/introduction/vulkan_overview/) → [Vulkan Usage](https://vkguide.dev/docs/introduction/vulkan_execution/) | 先认识 instance、device、queue、image、command buffer 等对象各自的职责，不要求记住所有函数名 |
+| 2 · 主线必读 | [Vulkan Initialization](https://vkguide.dev/docs/new_chapter_1/vulkan_init_flow/) → [Initialization Code](https://vkguide.dev/docs/new_chapter_1/vulkan_init_code/) | 对应初始化链与 swapchain；先理解对象关系，再看 vk-bootstrap 包装了哪些工作 |
+| 3 · 主线必读 | [Executing Vulkan Commands](https://vkguide.dev/docs/new_chapter_1/vulkan_command_flow/) → [Setting up Vulkan commands](https://vkguide.dev/docs/new_chapter_1/vulkan_commands_code/) | 对应 command pool / buffer；关注分配、录制、提交、执行和复用分别发生在什么阶段 |
+| 4 · 主线必读 | [Rendering Loop](https://vkguide.dev/docs/new_chapter_1/vulkan_mainloop/) → [Mainloop Code](https://vkguide.dev/docs/new_chapter_1/vulkan_mainloop_code/) | 对应 fence、semaphore、获取图像、清屏和呈现；读后自行设计 FrameData 与同步逻辑 |
+| 5 · 主线必读 | [Khronos：Swapchain Semaphore Reuse](https://docs.vulkan.org/guide/latest/swapchain_semaphore_reuse.html) | 专门核对呈现相关同步对象的复用条件，与第 4 行配套阅读；不要仅凭教程示例或画面正常判定同步正确 |
+| 6 · 主题必读 | [Khronos：Dynamic Rendering](https://docs.vulkan.org/samples/latest/samples/extensions/dynamic_rendering/README.html) | 先读传统 render pass 与 dynamic rendering 的区别、附件描述和 begin / end 概念；pipeline 细节到 Task 02 再回看 |
+| 7 · 主题必读 | [Window Resizing](https://vkguide.dev/docs/new_chapter_3/resizing_window/) | 对应 resize 与 swapchain 重建。这里借用教程 Chapter 3 的文章，只读窗口变化和重建部分 |
+
+教材的 Chapter 1 用清屏命令演示帧循环，不能覆盖本任务列出的所有 dynamic rendering 概念，因此单独补了第 6 行。Introduction 中也有旧式 render pass 的示意，阅读时重点理解对象职责，不把它当作本仓库的实现要求。
+
+补充 / 工具：[Validation Overview](https://docs.vulkan.org/guide/latest/validation_overview.html) 用于认识验证层；[RenderDoc Quick Start](https://github.com/baldurk/renderdoc/blob/v1.x/docs/getting_started/quick_start.rst) 用于第一次抓帧；同步概念仍模糊时读 [TU Wien 第 7 讲 Synchronization 讲义](https://www.cg.tuwien.ac.at/courses/ARTR/slides/VulkanLectureSeries/ARTR2022_VK07_Synchronization.pdf)。
+
+规范查阅：[Command Buffers](https://docs.vulkan.org/spec/latest/chapters/cmdbuffers.html)、[Synchronization](https://docs.vulkan.org/spec/latest/chapters/synchronization.html)、[WSI / Swapchain](https://docs.vulkan.org/spec/latest/chapters/VK_KHR_surface/wsi.html)。遇到某个对象状态或返回值不确定时，再查对应小节。
 
 ### 知识点
 
@@ -222,13 +273,6 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 
 窗口稳定运行、resize 不崩溃、Validation 零报错、注入的 bug 被独立找出、口试通过。
 
-### 参考
-
-- vkguide Chapter 0～1
-- Vulkan Tutorial：Swap chain、Rendering and presentation 两节
-- TU Wien Vulkan Lecture Series：Synchronization
-- [Vulkan Guide：Swapchain Semaphore Reuse](https://docs.vulkan.org/guide/latest/swapchain_semaphore_reuse.html)
-
 ---
 
 ## Task 02 管线与网格
@@ -236,6 +280,22 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 ### 目标
 
 创建图形管线，从硬编码三角形到带深度测试的网格。首次练习"接口先行"。
+
+<a id="task02-learning"></a>
+
+### 学习资料与顺序
+
+| 顺序 | 直接入口 | 阅读重点与对应工作 |
+|---|---|---|
+| 1 · 主线必读 | [Vulkan Shaders](https://vkguide.dev/docs/new_chapter_2/vulkan_shader_drawing/) → [Vulkan Shaders - Code](https://vkguide.dev/docs/new_chapter_2/vulkan_shader_code/) | 只取 GLSL、SPIR-V、编译与 shader module 加载部分；教程的 compute 绘制效果不是本 Task 的交付物 |
+| 2 · 主线必读 | [The graphics pipeline](https://vkguide.dev/docs/new_chapter_3/render_pipeline/) → [Setting up render pipeline](https://vkguide.dev/docs/new_chapter_3/building_pipeline/) | 认识图形管线状态与 dynamic rendering 格式声明，再自行设计 PipelineBuilder.h；教程中的 builder 不替代你的接口作业 |
+| 3 · 主线必读 | [Mesh buffers](https://vkguide.dev/docs/new_chapter_3/mesh_buffers/)；[Khronos：Push Constants](https://docs.vulkan.org/guide/latest/push_constants.html) | 对应 VMA buffer 上传、顶点数据、索引和 MVP 传递，联系自己的数据流理解 |
+| 4 · 主线必读 | [Khronos：Depth](https://docs.vulkan.org/guide/latest/depth.html)；[Mesh Loading](https://vkguide.dev/docs/new_chapter_3/loading_meshes/) 的深度相关部分 | 对应深度格式、附件与遮挡；本任务不要求提前完成 Task 03 的 glTF 场景加载 |
+| 5 · 概念核对 | [Buffer Device Address](https://docs.vulkan.org/guide/latest/buffer_device_address.html)；[Pipeline Dynamic State](https://docs.vulkan.org/guide/latest/dynamic_state.html) | 对应 BDA 与传统顶点输入的差异、PSO 状态边界和口试中的取舍问题 |
+
+补充：[Memory Allocation](https://docs.vulkan.org/guide/latest/memory_allocation.html) 帮助理解 VMA 所处的层次；[Shader Memory Layout](https://docs.vulkan.org/guide/latest/shader_memory_layout.html) 用于核对 CPU 与 shader 的数据布局。
+
+规范查阅：[Pipelines](https://docs.vulkan.org/spec/latest/chapters/pipelines.html)。学习后应能自行列出你实际使用的 PSO 状态，并解释哪些由接口表达、哪些在绘制时改变。
 
 ### 知识点
 
@@ -282,11 +342,6 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 
 网格正确、深度遮挡正确、切换 shader 无需重建其他对象、口试通过。
 
-### 参考
-
-- vkguide Chapter 2、Chapter 3 前半
-- Vulkan Guide：Pipeline 相关章节
-
 ---
 
 ## Task 03 描述符、纹理与 barrier
@@ -294,6 +349,24 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 ### 目标
 
 理解描述符体系与资源状态转换，加载并绘制带贴图的 glTF 场景。barrier 是本仓库最核心的手写内容。
+
+<a id="task03-learning"></a>
+
+### 学习资料与顺序
+
+| 顺序 | 直接入口 | 阅读重点与对应工作 |
+|---|---|---|
+| 1 · 主线必读 | [Khronos：Mapping Data to Shaders](https://docs.vulkan.org/guide/latest/mapping_data_to_shaders.html) → [Descriptor Abstractions](https://vkguide.dev/docs/new_chapter_4/descriptor_abstractions/) | 先认识资源与 shader 输入的绑定关系，再研究 layout、pool、set、更新和辅助类职责；接口由你设计 |
+| 2 · 主线必读 | [Meshes and Camera](https://vkguide.dev/docs/new_chapter_4/new_drawloop/)；[Shader Memory Layout](https://docs.vulkan.org/guide/latest/shader_memory_layout.html) | 重点读场景 / 相机数据上传和布局，对应 UBO；材料系统相关重构留到 Task 04 |
+| 3 · 主线必读 | [Textures](https://vkguide.dev/docs/new_chapter_4/textures/) | 对应 image、view、sampler、上传和采样；先完成单张纹理，再扩展场景 |
+| 4 · 主线必读 | [Synchronization Examples](https://docs.vulkan.org/guide/latest/synchronization_examples.html) | 按自己的上传与采样路径阅读 Transfer Dependencies 等相关例子，逐条自行判断 barrier 的理由，不照抄所有例子 |
+| 5 · 主线必读 | [GLTF Scene Nodes](https://vkguide.dev/docs/new_chapter_5/gltf_nodes/) → [GLTF Textures](https://vkguide.dev/docs/new_chapter_5/gltf_textures/) | 对应节点、网格与纹理的加载关系。这里只实现当前场景所需能力，Task 04 再系统整理材质与生命周期 |
+
+教程的场景加载会引用其已有材质类；阅读时先追踪资源关系，再与自己的当前接口对应，不需要为了匹配教程而提前完成 Task 04。
+
+补充：[TBR Best Practices](https://docs.vulkan.org/guide/latest/tile_based_rendering_best_practices.html) 与 [Using Pipeline Barriers Efficiently](https://docs.vulkan.org/samples/latest/samples/performance/pipeline_barriers/README.html)，用于思考 barrier 的性能影响；桌面实测和移动 GPU 推测应分开记录。
+
+规范查阅：[Descriptor Sets](https://docs.vulkan.org/spec/latest/chapters/descriptorsets.html)、[Resource Creation](https://docs.vulkan.org/spec/latest/chapters/resources.html)、[Synchronization](https://docs.vulkan.org/spec/latest/chapters/synchronization.html)。
 
 ### 知识点
 
@@ -337,12 +410,6 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 
 纹理正确、Validation 零报错、RenderDoc 中每个 image layout 与预期一致、注入 bug 被独立找出、口试通过。
 
-### 参考
-
-- vkguide Chapter 3 后半、Chapter 4
-- Vulkan Guide：Synchronization Examples 页面
-- Khronos Vulkan-Samples：`samples/performance`
-
 ---
 
 ## Task 04 材质系统与资源生命周期
@@ -350,6 +417,21 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 ### 目标
 
 整理前三个 Task 的代码，形成材质系统与绘制流程，接入 ImGui。本任务反过来让 agent 大量生成代码，你专门练 review 和生命周期分析。
+
+<a id="task04-learning"></a>
+
+### 学习资料与顺序
+
+| 顺序 | 直接入口 | 阅读重点与对应工作 |
+|---|---|---|
+| 1 · 主线必读 | [Engine Architecture](https://vkguide.dev/docs/new_chapter_4/engine_arch/) → [Setting up Materials](https://vkguide.dev/docs/new_chapter_4/materials/) | 研究场景对象、绘制数据和材质的职责关系，形成给 agent 的接口与行为约束 |
+| 2 · 主线必读 | [Improving the render loop](https://vkguide.dev/docs/new_chapter_2/vulkan_new_rendering/) 的 Deletion queue 部分 | 对应销毁管理；阅读后审查生成实现的完成依据与资源归属，不仅检查容器里存了什么 |
+| 3 · 主线必读 | [Setting up IMGUI](https://vkguide.dev/docs/new_chapter_2/vulkan_imgui_setup/)；[ImGui 官方 SDL3 / Vulkan 示例](https://github.com/ocornut/imgui/blob/master/examples/example_sdl3_vulkan/main.cpp) | 学习接入步骤与平台 / 渲染后端分工；SDL3 示例仅在选用 SDL3 时适用，实际 API 以项目锁定版本为准 |
+| 4 · 主线必读 | [Faster Draw](https://vkguide.dev/docs/new_chapter_5/faster_draw/) 的绘制组织和排序部分 | 对应 DrawContext 与材质排序；剔除等额外优化按需阅读，不增加本 Task 的功能要求 |
+
+补充：[ImGui Vulkan backend](https://github.com/ocornut/imgui/blob/master/backends/imgui_impl_vulkan.cpp)，用于追踪后端实际创建和释放的资源。不要把不同版本的初始化结构混用。
+
+规范查阅：[Fundamentals / Object Lifetime](https://docs.vulkan.org/spec/latest/chapters/fundamentals.html)。最终 review 报告和生命周期图仍由你依据自己的实现写出。
 
 ### 知识点
 
@@ -393,11 +475,6 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 
 切换材质不重建资源、退出时无泄漏报告、review 报告至少三处修复、口试通过。
 
-### 参考
-
-- vkguide Chapter 5
-- Dear ImGui：`examples/example_sdl3_vulkan`
-
 ---
 
 ## Task 05 多 pass 与 GPU 计时
@@ -405,6 +482,22 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 ### 目标
 
 引入第二个 render pass 与跨 pass 资源依赖，实现 per-pass GPU 时间戳。开始"你出设计、agent 出实现"的模式。
+
+<a id="task05-learning"></a>
+
+### 学习资料与顺序
+
+| 顺序 | 直接入口 | 阅读重点与对应工作 |
+|---|---|---|
+| 1 · 原理主线 | [LearnOpenGL：Shadow Mapping](https://learnopengl.com/Advanced-Lighting/Shadows/Shadow-Mapping) | 学习光源视角深度、阴影比较与 bias 的原理；这是 OpenGL 教材，不照搬其 API 到 Vulkan |
+| 2 · Vulkan 对照 | [Sascha Willems：shadowmapping](https://github.com/SaschaWillems/Vulkan/blob/master/examples/shadowmapping/shadowmapping.cpp) | 在示例中追踪 shadow / main 两个阶段和资源读写，作为理解材料；自己的依赖图与 barrier 仍独立完成 |
+| 3 · 主线必读 | [Synchronization Examples](https://docs.vulkan.org/guide/latest/synchronization_examples.html) | 定位 Graphics to Graphics Dependencies 中深度附件写入后被采样的例子，与自己的 pass 图对应 |
+| 4 · 主线必读 | [Khronos：Timestamp Queries](https://docs.vulkan.org/samples/latest/samples/api/timestamp_queries/README.html) | 学习查询支持、pool、写入位置、结果读取和单位；结合本仓库 Vulkan 1.3 的 `vkCmdWriteTimestamp2` 核对使用条件 |
+| 5 · 工具必读 | [Nsight Graphics：GPU Trace Overview](https://docs.nvidia.com/nsight-graphics/UserGuide/gpu-trace-overview.html) | 对应 GPU timeline 和计时对照；先确认工具与硬件支持，再选择相同场景和测量范围 |
+
+补充：[Khronos 对 TBR 内部计时局限的说明](https://docs.vulkan.org/features/latest/features/proposals/VK_QCOM_elapsed_timer_query.html)，先读 Problem Statement；这里只用于理解问题，不要求接入该扩展。
+
+规范查阅：[Queries](https://docs.vulkan.org/spec/latest/chapters/queries.html) 的 Timestamp Queries 与结果可用性部分。学习后再自行完成 GpuTimer.h 和 pass 依赖图。
 
 ### 知识点
 
@@ -449,12 +542,6 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 
 阴影正确、timestamp 与 Nsight 量级一致、口试通过。
 
-### 参考
-
-- Sascha Willems：`shadowmapping`、`timestampquery`
-- Vulkan Spec：Queries
-- [Vulkan Spec：查询结果可用性与时间戳](https://docs.vulkan.org/spec/latest/chapters/queries.html)
-
 ---
 
 ## Task 06 帧分析与 RHI 对照
@@ -462,6 +549,20 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 ### 目标
 
 用工具审视自己的帧，对照成熟 RHI 理解抽象高度的取舍。不写新功能。
+
+<a id="task06-learning"></a>
+
+### 学习资料与顺序
+
+| 顺序 | 直接入口 | 阅读重点与对应工作 |
+|---|---|---|
+| 1 · 工具复习 | [RenderDoc Quick Start](https://github.com/baldurk/renderdoc/blob/v1.x/docs/getting_started/quick_start.rst)；[Nsight GPU Trace Overview](https://docs.nvidia.com/nsight-graphics/UserGuide/gpu-trace-overview.html) | 结合 README 附录 B 对照自己的捕获；本次从“会打开面板”推进到“能引用具体事件和资源支持判断” |
+| 2 · 主线必读 | [Using Pipeline Barriers Efficiently](https://docs.vulkan.org/samples/latest/samples/performance/pipeline_barriers/README.html) | 学习如何比较同步策略的性能影响，再检查自己帧中的依赖；不要先假定一定存在多余 barrier |
+| 3 · 主线必读 | [NVRHI Programming Guide](https://github.com/NVIDIA-RTX/NVRHI/blob/main/doc/ProgrammingGuide.md) | 先读 Resources、Command List、State Tracking and Barriers、Binding Layouts and Sets、Pipelines and States，建立五个对照维度 |
+| 4 · 主线必读 | [NVRHI：nvrhi.h](https://github.com/NVIDIA-RTX/NVRHI/blob/main/include/nvrhi/nvrhi.h) | 带着上一步的概念通读接口，记录版本和实际声明位置，再由你填写对照表 |
+| 5 · 主线必读 | [Writing an efficient Vulkan renderer](https://zeux.io/2020/02/27/writing-an-efficient-vulkan-renderer/) | 按内存、descriptor、命令录制、barrier 等主题联系自己的实现。文章发表于 2020 年，硬件数据与具体建议需结合当前设备验证 |
+
+补充：[Godot RenderingDevice 头文件](https://github.com/godotengine/godot/blob/master/servers/rendering/rendering_device.h)，可用于发现另一种接口组织方式；本 Task 主要完成 NVRHI 五项对照，不要求现在通读整个 Godot 渲染器。
 
 ### Agent 分工
 
@@ -494,12 +595,6 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 
 两份文档完成、barrier 问题已修复、口试通过。
 
-### 参考
-
-- NVRHI、Godot `rendering_device.h`
-- [NVRHI Programming Guide：State Tracking and Barriers](https://github.com/NVIDIA-RTX/NVRHI/blob/main/doc/ProgrammingGuide.md#state-tracking-and-barriers)
-- Writing an efficient Vulkan renderer
-
 ---
 
 ## Task 07 接口先行：设计你的 RHI
@@ -507,6 +602,22 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 ### 目标
 
 课程终点。你设计一版 RHI 接口草案，agent 用 Vulkan 实现其中一个子集，你评审实现并对照三种封装风格修订自己的设计。
+
+<a id="task07-learning"></a>
+
+### 学习资料与顺序
+
+先回看自己在 Task 04～06 写出的生命周期图、pass 依赖图和对照表，再按下表阅读。阅读目标是帮助你发现需要作出的决定，不提供一套必须照搬的 RHI 接口。
+
+| 顺序 | 直接入口 | 阅读重点与对应工作 |
+|---|---|---|
+| 1 · 主线复习 | [NVRHI Programming Guide](https://github.com/NVIDIA-RTX/NVRHI/blob/main/doc/ProgrammingGuide.md) 与 [nvrhi.h](https://github.com/NVIDIA-RTX/NVRHI/blob/main/include/nvrhi/nvrhi.h) | 回看资源寿命、command list、状态跟踪和 binding 的责任边界；用于选择自己的封装高度 |
+| 2 · 主线对照 | [Godot RenderingDevice](https://github.com/godotengine/godot/blob/master/servers/rendering/rendering_device.h) | 按资源创建、命令记录、绑定和释放几组接口查找，不要求通读所有实现 |
+| 3 · 主线对照 | [bgfx API Reference](https://bkaradzic.github.io/bgfx/bgfx.html) | 重点看 View、资源创建与绘制提交相关接口，比较调用者需要显式表达的内容 |
+| 4 · 设计专题 | [GDC：FrameGraph — Extensible Rendering Architecture in Frostbite](https://www.gdcvault.com/play/1024612/FrameGraph-Extensible-Rendering-Architecture-in) | 关注 pass 与资源如何组成图，以及自动化应承担什么责任；结合自己的 Task 05 依赖图思考，不要求实现完整 FrameGraph |
+| 5 · 专题补充 | [Descriptor Indexing](https://docs.vulkan.org/guide/latest/extensions/VK_EXT_descriptor_indexing.html)；[TBR Best Practices](https://docs.vulkan.org/guide/latest/tile_based_rendering_best_practices.html) | 对应 bindless 适用范围与 TBR / IMR 取舍，帮助识别当前设计的能力边界 |
+
+规范查阅：[Resource Creation / Memory Aliasing](https://docs.vulkan.org/spec/latest/chapters/resources.html)、[Synchronization](https://docs.vulkan.org/spec/latest/chapters/synchronization.html)。涉及资源别名和调度的判断，回到实际使用范围与完成条件核对。
 
 ### Agent 分工
 
@@ -545,11 +656,6 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 ### 验收
 
 接口草案 + 最小实现可运行、设计文档完成、口试通过。
-
-### 参考
-
-- NVRHI、Godot RenderingDevice、bgfx
-- Writing an efficient Vulkan renderer
 
 ---
 
@@ -618,12 +724,13 @@ Shader 调试需 glslc 加 `-g`。排查顺序：Validation 输出 → RenderDoc
 
 ### 主线教程
 
-- [vkguide.dev](https://vkguide.dev) —— Task 01～05 对应 Chapter 0～5
+- [vkguide.dev](https://vkguide.dev) —— 项目式教程，按各 Task 的文章级学习路径阅读，编号不一一对应
 - [Vulkan Tutorial](https://vulkan-tutorial.com) —— 概念补充
 
 ### 视频
 
 - [TU Wien Vulkan Lecture Series](https://www.youtube.com/playlist?list=PLmIqTlJ6KsE1Jx5HV4sd2jOe3V1KMHHgn)
+- [第 7 讲 Synchronization 讲义（PDF）](https://www.cg.tuwien.ac.at/courses/ARTR/slides/VulkanLectureSeries/ARTR2022_VK07_Synchronization.pdf) —— Task 01、03 的同步概念补充
 
 ### 样例仓库
 

@@ -2,6 +2,8 @@
 
 状态：等待 Task 00。建议分支：`task/01-sync`。
 
+学习入口：[Task 01 学习资料与阅读顺序](../README.md#task01-learning)。按对象概览、初始化、命令执行、帧循环的顺序读，再补充同步复用与窗口重建。
+
 目标：用自己的帧循环画出随时间变化的清屏颜色，并能解释每项同步的必要性。
 
 ## 分工
@@ -42,4 +44,4 @@
 - [ ] 注入问题由用户找到，练习状态已结束；修复后重新验证正常运行。
 - [ ] 回顾 00～01 的 debug-log；更新总进度，按用户指令结束分支与标记 `task-01`。
 
-阅读：[vkguide：Rendering Loop](https://vkguide.dev/docs/new_chapter_1/vulkan_mainloop/)；[Vulkan Guide：Swapchain Semaphore Reuse](https://docs.vulkan.org/guide/latest/swapchain_semaphore_reuse.html)；[任务入口](README.md)。
+[返回任务入口](README.md)。
