@@ -94,11 +94,26 @@ Task 07 会让你设计自己的一版，并对照上面三种风格评审。
 |---|---|---|
 | 语言 / 构建 | C++20、CMake、vcpkg | |
 | 教程主线 | vkguide.dev 2.0 | 按各 Task 的文章级学习路径阅读；Task 编号与教程 Chapter 不一一对应 |
-| 基建库 | volk、vk-bootstrap、VMA、SDL3 或 GLFW、glm、fastgltf、Dear ImGui | |
+| 窗口 / 输入 | SDL3 | 统一使用 SDL3 稳定发布版；SDL 负责窗口、事件与 Vulkan surface 接入 |
+| 基建库 | volk、vk-bootstrap、VMA、glm、fastgltf、Dear ImGui | ImGui 使用 SDL3 平台后端与 Vulkan 渲染后端 |
 | Shader | GLSL + glslc，编译加 `-g` | |
 | 调试 | Validation Layer 全程开启、RenderDoc、Nsight Graphics | |
 | 参考硬件 | Windows + NVIDIA RTX | 工具链最完整 |
 | Agent | 任意支持读取 `AGENTS.md` 的编码 agent | |
+
+### 教程版本与本仓库的约定
+
+SDL 官方已将 SDL2 标为 legacy / 维护模式，并建议应用迁移到 SDL3，见 [官方版本说明](https://wiki.libsdl.org/SDL3/SourceCode)。本仓库从 SDL3 起步，具体稳定版本在 Task 00 通过 vcpkg baseline 固定，并记录实际解析的依赖版本。
+
+vkguide 仍作为 Vulkan 概念主线，但其 starter 和部分文章使用 SDL2。阅读时按下面的边界对照；SDL 相关 API 以 [SDL3 官方文档](https://wiki.libsdl.org/SDL3/FrontPage) 为准。
+
+| Task | 本仓库采用的做法 | 阅读教程时需要核对 |
+|---|---|---|
+| 00 | vcpkg 的 `sdl3`、CMake 的 `SDL3::SDL3`、最小 SDL3 窗口 starter | SDL3 头文件与程序入口；移除教程的 SDL2 依赖，避免同一依赖同时来自 vcpkg 与教程第三方目录 |
+| 01 | SDL3 窗口事件、Vulkan 扩展查询与 surface 接入 | 返回值、函数参数、事件类型及窗口像素尺寸均须查 SDL3 文档；帧循环与同步仍由用户实现 |
+| 04 | `imgui_impl_sdl3` + `imgui_impl_vulkan` | ImGui 核心与两个后端使用同一版本；渲染路径保持 Vulkan 1.3 dynamic rendering |
+
+SDL3 的 GPU API 是另一层图形抽象，本课程直接学习 Vulkan；这里使用 SDL3 的窗口、输入与 Vulkan 接入功能。后续 Task 继承上述版本选择，不自行切换窗口库或跟随依赖开发分支升级。
 
 ---
 
@@ -106,7 +121,7 @@ Task 07 会让你设计自己的一版，并对照上面三种风格评审。
 
 | Task | 主题 | Agent 参与度 | 核心交付物 | 状态 |
 |---|---|---|---|---|
-| [00](tasks/task00.md) | 环境与协作约定 | 高 | 可运行 starter + `AGENTS.md` | [ ] 待开始 |
+| [00](tasks/task00.md) | 环境与协作约定 | 高 | SDL3 窗口 starter + `AGENTS.md` | [ ] 待开始 |
 | [01](tasks/task01.md) | 帧循环与同步 | 低 | 清屏 + 同步流程图 + 口试 | [ ] 等待 00 |
 | [02](tasks/task02.md) | 管线与网格 | 中（接口先行） | 带深度网格 + PSO 状态清单 | [ ] 等待 01 |
 | [03](tasks/task03.md) | 描述符、纹理与 barrier | 低 | glTF 场景 + barrier 说明 + 找 bug | [ ] 等待 02 |
@@ -162,19 +177,20 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 
 | 顺序 | 直接入口 | 阅读重点与对应工作 |
 |---|---|---|
-| 1 · 主线必读 | [vkguide：Building Project](https://vkguide.dev/docs/new_chapter_0/building_project/) | 从这里开始。了解 SDK、编译器、CMake 与 starting point 的关系，完成首次构建 |
-| 2 · 主线必读 | [Project layout and libraries](https://vkguide.dev/docs/introduction/project_libs/) → [Code Walkthrough](https://vkguide.dev/docs/new_chapter_0/code_walkthrough/) | 认识项目目录、依赖用途，以及 starter 的初始化、运行、退出入口；为复述构建过程做准备 |
-| 3 · 按需补充 | [CMake 官方教程](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)；[vcpkg 与 CMake 入门](https://learn.microsoft.com/en-us/vcpkg/get_started/get-started) | 不熟构建工具时阅读基础项目、target 与依赖接入部分；不要求先学完整个 CMake |
-| 4 · 安装入口 | [Vulkan SDK](https://vulkan.lunarg.com/sdk/home)；[RenderDoc](https://renderdoc.org/)；[Nsight Graphics](https://developer.nvidia.com/nsight-graphics) | 与本任务工具安装清单对应，版本信息由你实际检查后记录 |
-| 5 · 工具准备 | [RenderDoc Quick Start](https://renderdoc.org/docs/getting_started/quick_start.html)（[官方源码镜像](https://github.com/baldurk/renderdoc/blob/v1.x/docs/getting_started/quick_start.rst)） | 先认识如何启动应用和捕获一帧；实际帧分析在后续 Task 中练习 |
+| 1 · 主线必读 | [SDL3：CMake 接入](https://wiki.libsdl.org/SDL3/README-cmake)；[vcpkg 与 CMake 入门](https://learn.microsoft.com/en-us/vcpkg/get_started/get-started) | 先读 Including SDL in your project，认识 `SDL3::SDL3`；本仓库通过 vcpkg 提供 SDL3，不另编一份教程自带 SDL2 |
+| 2 · 主线必读 | [SDL3 程序入口](https://wiki.libsdl.org/SDL3/README-main-functions)；[SDL2 → SDL3 迁移说明](https://wiki.libsdl.org/SDL3/README-migration) | 只读入口、头文件、初始化返回值和窗口创建相关部分；课程采用普通 main 与事件循环，认识 `SDL_main.h` 的作用，暂不学回调式入口或其他子系统 |
+| 3 · 教程对照 | [Building Project](https://vkguide.dev/docs/new_chapter_0/building_project/) → [Project layout and libraries](https://vkguide.dev/docs/introduction/project_libs/) → [Code Walkthrough](https://vkguide.dev/docs/new_chapter_0/code_walkthrough/) | 理解 SDK、目录与依赖用途；教程的 SDL2 starter 作为结构参考，不再要求先把它编译通过 |
+| 4 · 按需补充 | [CMake 官方教程](https://cmake.org/cmake/help/latest/guide/tutorial/index.html) | 不熟构建工具时阅读基础项目与 target；不要求先学完整个 CMake |
+| 5 · 安装入口 | [Vulkan SDK](https://vulkan.lunarg.com/sdk/home)；[RenderDoc](https://renderdoc.org/)；[Nsight Graphics](https://developer.nvidia.com/nsight-graphics) | 与本任务工具安装清单对应，版本信息由你实际检查后记录 |
+| 6 · 工具准备 | [RenderDoc Quick Start](https://renderdoc.org/docs/getting_started/quick_start.html)（[官方源码镜像](https://github.com/baldurk/renderdoc/blob/v1.x/docs/getting_started/quick_start.rst)） | 先认识如何启动应用和捕获一帧；实际帧分析在后续 Task 中练习 |
 
-注意：vkguide 的起始工程带有自己的第三方库安排。本仓库计划使用 vcpkg，需先核对依赖来源与窗口库版本；原教程的构建命令不保证能原样套用到适配后的工程。
+本任务的 starter 仅验证 SDL3 初始化、创建窗口、处理关闭与退出。Vulkan 初始化、surface、swapchain 和帧循环在 Task 01 开始；工具链是否支持 Vulkan，先用 SDK 自带的 `vkcube` 单独验证。
 
 ### Agent 分工
 
 | agent 可直接生成 | agent 只可提问 / review | 必须独立完成 |
 |---|---|---|
-| CMake、vcpkg 清单、shader 编译脚本 | | `AGENTS.md`、`docs/task00-env.md` |
+| CMake、vcpkg 清单、shader 编译脚本、SDL3 最小窗口启动样板（仅创建 / 关闭与退出） | | `AGENTS.md`、`docs/task00-env.md` |
 
 角色：生成者。
 
@@ -182,16 +198,16 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 
 - [ ] 更新显卡驱动，安装 Vulkan SDK，运行 `vkcube` 确认出画面
 - [ ] 安装 CMake、vcpkg、RenderDoc、Nsight Graphics
-- [ ] 拉取 vkguide starting point 并编译通过
+- [ ] 固定 vcpkg baseline 与 SDL3 稳定版本，建立并编译 SDL3 最小窗口 starter；窗口能打开、关闭并正常退出
 - [ ] 让 agent 解释 CMakeLists 每一段的作用，你复述一遍并写进文档
 - [ ] 按上文协作规则写出 `AGENTS.md`
 - [ ] 建立 `prompts/`、`docs/`、`docs/oral/` 目录与 `docs/debug-log.md` 空文件
 
 ### 交付物
 
-- 可运行 starter 工程
+- 可运行 SDL3 最小窗口 starter 工程
 - `AGENTS.md`
-- `docs/task00-env.md`：SDK 与驱动版本、构建问题及解法
+- `docs/task00-env.md`：SDK、驱动、SDL3 与 vcpkg baseline 版本，构建问题及解法
 
 ### 口试题
 
@@ -199,7 +215,7 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 
 ### 验收
 
-`vkcube` 与 starter 均能启动；agent 读取 `AGENTS.md` 后能正确复述协作规则。
+`vkcube` 能出画面，SDL3 starter 能打开窗口并正常关闭；agent 读取 `AGENTS.md` 后能正确复述协作规则。
 
 ---
 
@@ -227,6 +243,8 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 
 教材的 Chapter 1 用清屏命令演示帧循环，不能覆盖本任务列出的所有 dynamic rendering 概念，因此单独补了第 6 行。Introduction 中也有旧式 render pass 的示意，阅读时重点理解对象职责，不把它当作本仓库的实现要求。
 
+**SDL3 配套必读**：做第 2 行初始化时对照 [Vulkan 接入概览](https://wiki.libsdl.org/SDL3/CategoryVulkan)、[实例扩展查询](https://wiki.libsdl.org/SDL3/SDL_Vulkan_GetInstanceExtensions) 和 [创建 surface](https://wiki.libsdl.org/SDL3/SDL_Vulkan_CreateSurface)，核对与教程不同的参数及返回值。做第 7 行窗口重建时对照 [SDL3 事件类型](https://wiki.libsdl.org/SDL3/SDL_EventType)、[窗口像素尺寸](https://wiki.libsdl.org/SDL3/SDL_GetWindowSizeInPixels) 与 [高 DPI 说明](https://wiki.libsdl.org/SDL3/README-highdpi)，关注 `SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED`。区分窗口坐标尺寸与可绘制像素尺寸，再结合 Vulkan surface capabilities 判断 swapchain extent；不要照搬 SDL2 的窗口事件写法。
+
 补充 / 工具：[Validation Overview](https://docs.vulkan.org/guide/latest/validation_overview.html) 用于认识验证层；[RenderDoc Quick Start](https://github.com/baldurk/renderdoc/blob/v1.x/docs/getting_started/quick_start.rst) 用于第一次抓帧；同步概念仍模糊时读 [TU Wien 第 7 讲 Synchronization 讲义](https://www.cg.tuwien.ac.at/courses/ARTR/slides/VulkanLectureSeries/ARTR2022_VK07_Synchronization.pdf)。
 
 规范查阅：[Command Buffers](https://docs.vulkan.org/spec/latest/chapters/cmdbuffers.html)、[Synchronization](https://docs.vulkan.org/spec/latest/chapters/synchronization.html)、[WSI / Swapchain](https://docs.vulkan.org/spec/latest/chapters/VK_KHR_surface/wsi.html)。遇到某个对象状态或返回值不确定时，再查对应小节。
@@ -243,7 +261,7 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 
 | agent 可直接生成 | agent 只可提问 / review | 必须独立完成 |
 |---|---|---|
-| vk-bootstrap 初始化、窗口事件循环、swapchain 重建骨架 | 同步对象的编排、layout 转换的 barrier | `FrameData` 结构、每帧 acquire → record → submit → present 的同步逻辑、`docs/task01-sync.md` |
+| vk-bootstrap 初始化、SDL3 窗口事件与 surface 接入、swapchain 重建骨架 | 同步对象的编排、layout 转换的 barrier | `FrameData` 结构、每帧 acquire → record → submit → present 的同步逻辑、`docs/task01-sync.md` |
 
 角色：生成者（仅初始化）、导师、出题者、考官。
 
@@ -251,6 +269,7 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 
 - [ ] 实现 N 帧 in-flight 的 command buffer 与同步对象管理
 - [ ] 每帧清屏为随时间变化的颜色
+- [ ] 验证 SDL3 窗口 resize、最小化与恢复；支持调整显示缩放时，核对实际像素尺寸与 swapchain extent，处理零尺寸和暂不可绘制的状态
 - [ ] Validation 零报错；每条报错先自己复述含义再求助
 - [ ] 让 agent 注入一个同步 bug（例如去掉某个 semaphore wait），你用 validation 与 RenderDoc 找出并说明现象
 - [ ] RenderDoc 抓一帧，把附录 B 中的面板各点一遍
@@ -426,10 +445,10 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 |---|---|---|
 | 1 · 主线必读 | [Engine Architecture](https://vkguide.dev/docs/new_chapter_4/engine_arch/) → [Setting up Materials](https://vkguide.dev/docs/new_chapter_4/materials/) | 研究场景对象、绘制数据和材质的职责关系，形成给 agent 的接口与行为约束 |
 | 2 · 主线必读 | [Improving the render loop](https://vkguide.dev/docs/new_chapter_2/vulkan_new_rendering/) 的 Deletion queue 部分 | 对应销毁管理；阅读后审查生成实现的完成依据与资源归属，不仅检查容器里存了什么 |
-| 3 · 主线必读 | [Setting up IMGUI](https://vkguide.dev/docs/new_chapter_2/vulkan_imgui_setup/)；[ImGui 官方 SDL3 / Vulkan 示例](https://github.com/ocornut/imgui/blob/master/examples/example_sdl3_vulkan/main.cpp) | 学习接入步骤与平台 / 渲染后端分工；SDL3 示例仅在选用 SDL3 时适用，实际 API 以项目锁定版本为准 |
+| 3 · 主线必读 | [ImGui 官方 SDL3 / Vulkan 示例](https://github.com/ocornut/imgui/blob/master/examples/example_sdl3_vulkan/main.cpp)；[Setting up IMGUI](https://vkguide.dev/docs/new_chapter_2/vulkan_imgui_setup/) | 以官方 SDL3 示例核对平台接入，教程用于理解流程；选用 `imgui_impl_sdl3` + `imgui_impl_vulkan`，实际 API 以项目锁定版本为准 |
 | 4 · 主线必读 | [Faster Draw](https://vkguide.dev/docs/new_chapter_5/faster_draw/) 的绘制组织和排序部分 | 对应 DrawContext 与材质排序；剔除等额外优化按需阅读，不增加本 Task 的功能要求 |
 
-补充：[ImGui Vulkan backend](https://github.com/ocornut/imgui/blob/master/backends/imgui_impl_vulkan.cpp)，用于追踪后端实际创建和释放的资源。不要把不同版本的初始化结构混用。
+补充：[ImGui SDL3 backend](https://github.com/ocornut/imgui/blob/master/backends/imgui_impl_sdl3.cpp) 与 [ImGui Vulkan backend](https://github.com/ocornut/imgui/blob/master/backends/imgui_impl_vulkan.cpp)，用于核对事件转发及后端实际创建和释放的资源。ImGui 核心与两个后端必须来自同一版本；用 vcpkg 时核对锁定版本中 `sdl3-binding`、`vulkan-binding` 的配置。官方完整示例只作为接入参考，自己的帧循环继续沿用 Task 01，渲染使用 dynamic rendering；教程的 SDL2 后端和旧字体上传流程都需按所用版本重新核对。
 
 规范查阅：[Fundamentals / Object Lifetime](https://docs.vulkan.org/spec/latest/chapters/fundamentals.html)。最终 review 报告和生命周期图仍由你依据自己的实现写出。
 
@@ -453,7 +472,7 @@ Task 00～04 为必修主线，Task 05～07 为进阶。前三个概念 Task 的
 ### 要求
 
 - [ ] 实现 Material / MaterialInstance，DrawContext 按材质排序提交
-- [ ] 接入 ImGui，显示帧率与统计
+- [ ] 接入同一版本的 ImGui 核心、SDL3 平台后端与 Vulkan 渲染后端，显示帧率与统计；验证鼠标 / 键盘交互、窗口重建与关闭
 - [ ] 所有资源销毁走 deletion queue
 - [ ] 写 review 报告，列出 agent 代码中的问题（命名、生命周期、错误处理、性能）并修复
 
@@ -755,6 +774,7 @@ Shader 调试需 glslc 加 `-g`。排查顺序：Validation 输出 → RenderDoc
 ### 基建库
 
 - [volk](https://github.com/zeux/volk) ｜ [vk-bootstrap](https://github.com/charles-lunarg/vk-bootstrap) ｜ [VMA](https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator) ｜ [fastgltf](https://github.com/spnda/fastgltf) ｜ [Dear ImGui](https://github.com/ocornut/imgui) ｜ [glm](https://github.com/g-truc/glm)
+- [SDL3 官方文档](https://wiki.libsdl.org/SDL3/FrontPage) ｜ [SDL2 → SDL3 迁移说明](https://wiki.libsdl.org/SDL3/README-migration) ｜ [SDL3 Vulkan 接入](https://wiki.libsdl.org/SDL3/CategoryVulkan)
 
 ### 工具
 

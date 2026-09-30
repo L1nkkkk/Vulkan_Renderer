@@ -2,7 +2,7 @@
 
 状态：等待 Task 00。建议分支：`task/01-sync`。
 
-学习入口：[Task 01 学习资料与阅读顺序](../README.md#task01-learning)。按对象概览、初始化、命令执行、帧循环的顺序读，再补充同步复用与窗口重建。
+学习入口：[Task 01 学习资料与阅读顺序](../README.md#task01-learning)。按对象概览、初始化、命令执行、帧循环的顺序读，再补充同步复用与窗口重建；窗口接入同时对照该节的 SDL3 配套资料。
 
 目标：用自己的帧循环画出随时间变化的清屏颜色，并能解释每项同步的必要性。
 
@@ -10,17 +10,17 @@
 
 | agent 可直接生成 | agent 只可提问 / review | 必须独立完成 |
 |---|---|---|
-| vk-bootstrap 初始化、窗口事件循环、swapchain 重建骨架 | 同步对象编排、layout barrier 的选择 | `FrameData`、每帧 acquire → record → submit → present 逻辑、`docs/task01-sync.md` |
+| vk-bootstrap 初始化、SDL3 窗口事件与 surface 接入、swapchain 重建骨架 | 同步对象编排、layout barrier 的选择 | `FrameData`、每帧 acquire → record → submit → present 逻辑、`docs/task01-sync.md` |
 
 生成初始化或重建骨架时，不代填用户的同步与资源状态逻辑。文件混合了两类职责时，只改已明确授权的区域。
 
 ## 执行检查表
 
 - [ ] 01.1 确认 00 验收通过，并能重新启动 starter。
-- [ ] 01.2 用户说明初始化所需行为；agent 仅完成允许的初始化和窗口部分。
+- [ ] 01.2 用户说明初始化所需行为；agent 仅完成允许的 vk-bootstrap 初始化、SDL3 窗口与 surface 接入，核对 SDL3 的实例扩展查询、参数与返回值。
 - [ ] 01.3 用户设计帧资源及其归属，说明 frame index 和 swapchain image index 各自表示什么。
 - [ ] 01.4 用户实现帧循环和清屏，标出资源复用、录制、提交与呈现各自的约束。
-- [ ] 01.5 用户补齐 resize、最小化、恢复和 acquire / present 返回异常状态的处理，再验证资源重建路径。
+- [ ] 01.5 用户补齐 resize、最小化、恢复和 acquire / present 返回异常状态的处理，再验证资源重建路径；结合 SDL3 像素尺寸变化与 Vulkan surface capabilities 核对 extent，覆盖零尺寸或暂不可绘制状态。
 - [ ] 01.6 开启 Validation 和同步验证；遇到报错先用一句话复述含义，再讨论排查。
 - [ ] 01.7 用 RenderDoc 捕获一帧，逐一检查 README 附录 B 的面板，指出与自己录制命令对应的事件。
 - [ ] 01.8 用户自行完成同步流程图和 `docs/task01-sync.md`，结合实际代码解释复用依据。
@@ -33,6 +33,7 @@
 |---|---|
 | 正常运行 | 颜色连续变化，Validation 无错误 |
 | 反复 resize、最小化和恢复 | 无崩溃或无法继续绘制，能解释重建对象范围 |
+| 窗口尺寸与显示缩放 | 区分窗口坐标与像素尺寸，swapchain extent 符合 surface capabilities；在环境支持时验证显示缩放变化，否则记录限制 |
 | 1 / 2 / 3 帧 in-flight | 都能正确运行，并能区分正确性与延迟 / 吞吐观察 |
 | 资源复用 | 分别说明帧资源与呈现相关资源的完成依据 |
 | 工具与排错 | 有捕获观察记录，注入根因由用户独立定位 |

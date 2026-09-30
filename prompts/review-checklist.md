@@ -26,11 +26,11 @@
 
 | Task | 重点 |
 |---|---|
-| 00 | 可复现构建、依赖来源与版本、shader 编译路径、工作目录 |
-| 01 | 帧资源复用、WSI 相关对象复用、异常返回、resize / 最小化、layout 与提交范围 |
+| 00 | 可复现构建、SDL3 稳定版本与 vcpkg baseline、无重复 SDL2 依赖、最小窗口启动 / 关闭、shader 编译路径、工作目录 |
+| 01 | SDL3 surface 接入与事件、窗口像素尺寸和 surface capabilities、帧资源复用、WSI 相关对象复用、异常返回、resize / 最小化、layout 与提交范围 |
 | 02 | PSO 状态覆盖、dynamic rendering 格式、dynamic state、shader 数据契约、深度附件、BDA 生命周期 |
 | 03 | descriptor layout / pool / set / 更新、UBO 多帧访问、纹理范围、每条 barrier 的实际生产者与消费者 |
-| 04 | 用户先做自己的 review；agent 不能提供三个现成问题替代用户作业。受邀讨论时核对材质归属、排序适用范围、延迟销毁与 ImGui 生命周期 |
+| 04 | 用户先做自己的 review；agent 不能提供三个现成问题替代用户作业。受邀讨论时核对材质归属、排序适用范围、延迟销毁、ImGui 核心与 SDL3 / Vulkan 后端版本及生命周期 |
 | 05 | pass 依赖、shadow map 写读关系、计时查询支持、有效位 / 单位、结果可用性、查询槽复用 |
 | 06 | 捕获与结论是否对应、实验条件是否可比、RHI 引用版本与代码位置；仅事实校对，不补写观点 |
 | 07 | 接口是否表达用户意图、后端是否满足契约、跨 API 假设、最小子集范围与不可支持情形 |
