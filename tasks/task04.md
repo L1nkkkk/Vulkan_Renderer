@@ -1,0 +1,44 @@
+# Task 04 · 材质系统与资源生命周期
+
+状态：等待 Task 03。建议分支：`task/04-materials`。
+
+目标：整理材质、绘制提交与资源销毁；这次由用户担任审查者，找出并修复 agent 实现中的问题。
+
+## 分工
+
+| agent 可直接生成 | agent 只可提问 / review | 必须独立完成 |
+|---|---|---|
+| `Material` / `MaterialInstance` / `DrawContext` 实现、ImGui 接入、deletion queue 实现 | 用户写完的文档仅事实校对 | 生成代码的逐行注释、review 报告、至少三处改进及修复、`docs/task04-lifetime.md` |
+
+用户先给接口与行为约束。agent 不预先列出三个问题供用户照抄，也不故意把错误当成正常实现交付。
+
+## 执行检查表
+
+- [ ] 04.1 确认 03 全部验收通过，保存可复现的 glTF 场景基线。
+- [ ] 04.2 用户定义材质、实例、DrawContext 的职责、资源归属和切换行为，并向 agent 提出明确生成请求。
+- [ ] 04.3 agent 实现允许的部分并解释用途；用户逐行注释，对照意图审查。
+- [ ] 04.4 接入多物体多材质场景与 ImGui，显示帧率、物体数和绘制统计，核对统计口径。
+- [ ] 04.5 用户检查资源创建、引用、延迟销毁与退出路径，验证所有销毁操作进入约定的管理流程。
+- [ ] 04.6 用户独立找到至少三个可改进点，自行修复，并在 `docs/task04-review.md` 中说明问题、依据、修改和验证。
+- [ ] 04.7 验证切换材质、重复使用场景、resize 与退出；检查失效引用和泄漏报告。
+- [ ] 04.8 用户在 `docs/task04-lifetime.md` 中为 buffer、image、descriptor set、pipeline、command buffer、同步对象分别画生命周期图。
+- [ ] 04.9 完成 `/exam 04`。
+
+## 验收证据
+
+| 场景 | 通过条件 |
+|---|---|
+| 材质切换与排序 | 画面正确，不因切换已创建材质而无故重建资源；说明排序适用范围 |
+| ImGui | 帧率与统计可用，重建和关闭路径正常 |
+| 资源生命周期 | 能从图中追溯创建者、持有者、最后使用和安全销毁依据 |
+| 用户 review | 至少三个具体问题由用户识别并修复，有验证证据 |
+| 退出 | Validation 无错误，资源管理器无泄漏报告 |
+
+## 结束条件
+
+- [ ] 材质、overlay 和生命周期验收通过。
+- [ ] 两份用户文档及 `docs/oral/task04.md` 齐备，口试 5/5 通过。
+- [ ] 用户的 review 与修改独立完成，提交归属清楚。
+- [ ] 更新总进度；按用户指令标记 `task-04`。必修主线结束，选择进阶时再进入 05。
+
+阅读：[vkguide](https://vkguide.dev/) Chapter 5；[Dear ImGui Vulkan backend](https://github.com/ocornut/imgui/blob/master/backends/imgui_impl_vulkan.cpp)；[任务入口](README.md)。

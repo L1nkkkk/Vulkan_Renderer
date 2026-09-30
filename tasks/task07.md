@@ -1,0 +1,43 @@
+# Task 07 · 接口先行：设计你的 RHI
+
+状态：等待 Task 06。建议分支：`task/07-rhi`。
+
+目标：用户设计一版 RHI，借助最小 Vulkan 实现检验接口，再根据实现暴露的问题修订设计。
+
+## 分工
+
+| agent 可直接生成 | agent 只可提问 / review | 必须独立完成 |
+|---|---|---|
+| 用户接口子集的 Vulkan 后端实现 | 接口草案 review、用户设计文档的事实校对 | `rhi/*.h` 接口、封装高度与理由、`docs/task07-design.md`、对实现的评审 |
+
+最小实现只覆盖用户选定的“清屏 + 一个 draw”。不在本 Task 扩展成完整引擎，不由 agent 替用户决定资源状态、所有权或调度接口。
+
+## 执行检查表
+
+- [ ] 07.1 确认 06 全部验收通过，回看用户自己的生命周期图、pass 依赖图和 RHI 对照表。
+- [ ] 07.2 用户选择封装高度并说明目标、使用场景及明确不解决的问题。
+- [ ] 07.3 用户写 `rhi/` 下的接口头文件，覆盖 device、command list、buffer、texture、pipeline、binding、同步及必要的使用约束。
+- [ ] 07.4 请求接口 review；用户根据问题决定修改或保留，并记录取舍。
+- [ ] 07.5 用户明确清屏与一个 draw 所需的接口子集和预期行为，再交给 agent 实现 Vulkan 后端。
+- [ ] 07.6 用户逐行审查生成实现，记录误解、接口表达缺口与实现偏差；接口修订由用户完成。
+- [ ] 07.7 运行最小示例并用 Validation / RenderDoc 核对行为，确认上层通过用户设计的接口表达目标操作。
+- [ ] 07.8 用户完成 3000 字以上的 `docs/task07-design.md`，回答课程总览列出的封装高度、render graph、资源别名、TBR / IMR 与三个 RHI 对照问题。
+- [ ] 07.9 完成 `/exam 07`。
+
+## 验收证据
+
+| 内容 | 通过条件 |
+|---|---|
+| 接口归属 | 用户先设计，能解释契约与不支持的边界 |
+| 最小实现 | 清屏与一个 draw 可运行，Validation 无错误 |
+| 设计迭代 | 至少能展示实际评审中的问题、依据与用户取舍，不虚构缺陷 |
+| 设计文档 | 覆盖全部指定议题，区分已实现能力、设计设想与待验证部分 |
+
+## 结束条件
+
+- [ ] 用户接口、最小后端与评审完成，生成代码已逐行注释。
+- [ ] 用户设计文档及 `docs/oral/task07.md` 齐备，口试 5/5 通过。
+- [ ] 回顾 06～07 的 debug-log，更新总进度；按用户指令标记 `task-07`。
+- [ ] 后续引擎或 render graph 工作另定范围，不混入本 Task 的验收。
+
+阅读：[NVRHI](https://github.com/NVIDIA-RTX/NVRHI)；[Godot RenderingDevice](https://github.com/godotengine/godot/blob/master/servers/rendering/rendering_device.h)；[bgfx](https://github.com/bkaradzic/bgfx)；[任务入口](README.md)。
